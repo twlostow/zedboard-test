@@ -1,0 +1,91 @@
+-- -*- Mode: LUA; tab-width: 2 -*-
+
+peripheral {
+	 name = "Trigger Generator Block";
+	 prefix = "tg";
+	 hdl_entity = "trigger_generator_wb";
+
+	 reg {
+			name = "Control/Status Reg";
+			prefix = "CSR";
+
+			field {
+				 name = "Enable";
+				 type = BIT;
+				 clock = "clk_acq_i";
+				 prefix = "ENABLE";
+				 access_bus = READ_WRITE;
+				 access_dev = READ_ONLY;
+
+			};
+
+			field {
+				 name = "Polarity";
+				 type = BIT;
+				 clock = "clk_acq_i";
+				 prefix = "POLARITY";
+				 access_bus = READ_WRITE;
+				 access_dev = READ_ONLY;
+
+			};
+
+			field {
+				 name = "Channel Mask";
+				 type = SLV;
+				 size = 4;
+				 clock = "clk_acq_i";
+				 prefix = "MASK";
+				 access_bus = READ_WRITE;
+				 access_dev = READ_ONLY;
+			};
+
+			field {
+				 name = "Arm";
+				 type = MONOSTABLE;
+				 clock = "clk_acq_i";
+				 prefix = "ARM";
+			};
+
+			field {
+				 name = "Force Manual Trigger";
+				 type = MONOSTABLE;
+				 clock = "clk_acq_i";
+				 prefix = "FORCE";
+			};
+
+			field {
+				 name = "Triggered";
+				 type = BIT;
+				 clock = "clk_acq_i";
+				 prefix = "TRIGGERED";
+				 access_bus = READ_ONLY;
+				 access_dev = WRITE_ONLY;
+			};
+	 };
+
+	 reg {
+			name = "Threshold (low)";
+			prefix = "THR_LO";
+			field {
+				 name = "Threshold";
+				 size = 16;
+				 clock = "clk_acq_i";
+				 type = SLV;
+				 access_bus = READ_WRITE;
+				 access_dev = READ_ONLY;
+			};
+	 };
+
+	 reg {
+			name = "Threshold (high)";
+			prefix = "THR_HI";
+			field {
+				 name = "Threshold";
+				 size = 16;
+				 clock = "clk_acq_i";
+				 type = SLV;
+				 access_bus = READ_WRITE;
+				 access_dev = READ_ONLY;
+			};
+	 };
+};

@@ -1,0 +1,10 @@
+`define ADDR_ACQ_CSR                   5'h0
+`define ACQ_CSR_START_OFFSET 0
+`define ACQ_CSR_START 32'h00000001
+`define ACQ_CSR_READY_OFFSET 1
+`define ACQ_CSR_READY 32'h00000002
+`define ADDR_ACQ_SIZE                  5'h4
+`define ADDR_ACQ_PRETRIGGER            5'h8
+`define ADDR_ACQ_TRIG_POS              5'hc
+`define ADDR_ACQ_ADDR                  5'h10
+`define ADDR_ACQ_DATA                  5'h14

@@ -1,0 +1,15 @@
+`define ADDR_TG_CSR                    4'h0
+`define TG_CSR_ENABLE_OFFSET 0
+`define TG_CSR_ENABLE 32'h00000001
+`define TG_CSR_POLARITY_OFFSET 1
+`define TG_CSR_POLARITY 32'h00000002
+`define TG_CSR_MASK_OFFSET 2
+`define TG_CSR_MASK 32'h0000003c
+`define TG_CSR_ARM_OFFSET 6
+`define TG_CSR_ARM 32'h00000040
+`define TG_CSR_FORCE_OFFSET 7
+`define TG_CSR_FORCE 32'h00000080
+`define TG_CSR_TRIGGERED_OFFSET 8
+`define TG_CSR_TRIGGERED 32'h00000100
+`define ADDR_TG_THR_LO                 4'h4
+`define ADDR_TG_THR_HI                 4'h8
