@@ -21,7 +21,12 @@ entity adc_core is
     slave_i : in  t_axi4_lite_slave_in_32;
     slave_o : out t_axi4_lite_slave_out_32;
 
-    led_o : out std_logic
+    led0_o : out std_logic;
+    led1_o : out std_logic;
+
+    adc_cs_o : out std_logic;
+    adc_sclk_o : out std_logic;
+    adc_sdata_b : inout std_logic
     );
 end adc_core;
 
@@ -150,7 +155,7 @@ architecture rtl of adc_core is
   signal cnx_master_out : t_wishbone_master_out_array(0 to c_NUM_WB_SLAVES-1);
   signal cnx_master_in  : t_wishbone_master_in_array(0 to c_NUM_WB_SLAVES-1);
 
-  signal gpio_out           : std_logic_vector(31 downto 0);
+  signal gpio_out, gpio_in, gpio_oen           : std_logic_vector(31 downto 0);
   signal serdes_bitslip     : std_logic;
   signal serdes_bitslip_slv : std_logic_vector(8 downto 0);
 
@@ -265,9 +270,16 @@ begin
       slave_i    => cnx_master_out(c_SLAVE_GPIO),
       slave_o    => cnx_master_in(c_SLAVE_GPIO),
       gpio_out_o => gpio_out,
-      gpio_in_i  => (others => '0'),
-      gpio_oen_o => open);
+      gpio_in_i  => gpio_in,
+      gpio_oen_o => gpio_oen);
 
-  led_o <= gpio_out(0);
+  led0_o <= gpio_out(0);
+  led1_o <= gpio_out(4);
+
+  adc_cs_o <= gpio_out(5);
+  adc_sclk_o <= gpio_out(6);
+  adc_sdata_b <=gpio_out(7) when gpio_oen(7) = '0' else 'Z';
+  gpio_in(7) <= adc_sdata_b;
+  
 end rtl;
 

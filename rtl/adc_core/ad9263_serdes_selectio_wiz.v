@@ -84,7 +84,8 @@ module ad9263_serdes_selectio_wiz
   // Create the clock logic
 
   IBUFDS
-    #(.IOSTANDARD ("LVDS_25"))
+    #(.IOSTANDARD ("LVDS_25"),
+      .DIFF_TERM  ("TRUE"))
    ibufds_clk_inst
      (.I          (clk_in_p),
       .IB         (clk_in_n),
@@ -116,7 +117,7 @@ module ad9263_serdes_selectio_wiz
     ////------------------------------
     // Instantiate a buffer for every bit of the data bus
     IBUFDS
-      #(.DIFF_TERM  ("FALSE"),             // Differential termination
+      #(.DIFF_TERM  ("TRUE"),             // Differential termination
         .IOSTANDARD ("LVDS_25"))
      ibufds_inst
        (.I          (data_in_from_pins_p  [pin_count]),
