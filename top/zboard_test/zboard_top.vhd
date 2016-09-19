@@ -37,9 +37,12 @@ entity zboard_top is
     adc_fco_n_i : in std_logic;
     adc_d_p_i   : in std_logic_vector(7 downto 0);
     adc_d_n_i   : in std_logic_vector(7 downto 0);
+    adc_cs_o : out std_logic;
+    adc_sclk_o : out std_logic;
+    adc_sdata_b : inout std_logic;
 
-
-    led_o : out std_logic
+    led0_o : out std_logic;
+    led1_o : out std_logic
     );
 end zboard_top;
 
@@ -112,6 +115,7 @@ architecture rtl of zboard_top is
 
   end component;
 
+  signal led0, led1 : std_logic;
   
 begin
 
@@ -162,34 +166,42 @@ begin
       adc_d_n_i   => adc_d_n_i,
       slave_i     => m_axi_gp0_out,
       slave_o     => m_axi_gp0_in,
-      led_o       => led_o);
-
-  ila_0_1 : ila_0
-    port map (
-      clk => FCLK_CLK0,
-
-      probe0(0)  => m_axi_gp0_out.AWVALID,
-      probe1  => m_axi_gp0_out.AWADDR,
-      probe2  => m_axi_gp0_in.BRESP,
-      probe3(0)   => m_axi_gp0_out.ARVALID,
-      probe4(0)   => m_axi_gp0_out.BREADY,
-      probe5  => m_axi_gp0_out.ARADDR,
-      probe6(0)   => m_axi_gp0_out.RREADY,
-      probe7(0)   => m_axi_gp0_out.WLAST,
-      probe8(0)   => m_axi_gp0_out.WVALID,
-      probe9(0)   => m_axi_gp0_in.ARREADY,
-      probe10 => m_axi_gp0_out.WDATA,
-      probe11(0)  => m_axi_gp0_in.AWREADY,
-      probe12(0)  => m_axi_gp0_in.BVALID,
-      probe13 => m_axi_gp0_in.RRESP,
-      probe14 => m_axi_gp0_in.RDATA,
-      probe15 => m_axi_gp0_out.WSTRB,
-      probe16(0)  => m_axi_gp0_in.RVALID,
-      probe17 => "000",
-      probe18 => "000"
+      led0_o       => led0,
+      led1_o       => led1,
+      adc_cs_o => adc_cs_o,
+      adc_sdata_b => adc_sdata_b,
+      adc_sclk_o => adc_sclk_o
       );
 
+  --ila_0_1 : ila_0
+  --  port map (
+  --    clk => FCLK_CLK0,
 
+  --    probe0(0)  => m_axi_gp0_out.AWVALID,
+  --    probe1  => m_axi_gp0_out.AWADDR,
+  --    probe2  => m_axi_gp0_in.BRESP,
+  --    probe3(0)   => m_axi_gp0_out.ARVALID,
+  --    probe4(0)   => m_axi_gp0_out.BREADY,
+  --    probe5  => m_axi_gp0_out.ARADDR,
+  --    probe6(0)   => m_axi_gp0_out.RREADY,
+  --    probe7(0)   => m_axi_gp0_out.WLAST,
+  --    probe8(0)   => m_axi_gp0_out.WVALID,
+  --    probe9(0)   => m_axi_gp0_in.ARREADY,
+  --    probe10 => m_axi_gp0_out.WDATA,
+  --    probe11(0)  => m_axi_gp0_in.AWREADY,
+  --    probe12(0)  => m_axi_gp0_in.BVALID,
+  --    probe13 => m_axi_gp0_in.RRESP,
+  --    probe14 => m_axi_gp0_in.RDATA,
+  --    probe15 => m_axi_gp0_out.WSTRB,
+  --    probe16(0)  => m_axi_gp0_in.RVALID,
+  --    probe17 => "000",
+  --    probe18 => "000"
+  --    );
+
+
+  led0_o <= led0;
+  led1_o <= led1;
+  
 end rtl;
 
 

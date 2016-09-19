@@ -1,0 +1,12 @@
+`define ADDR_SI570_RFREQL              4'h0
+`define ADDR_SI570_RFREQH              4'h4
+`define ADDR_SI570_GPSR                4'h8
+`define SI570_GPSR_SCL_OFFSET 0
+`define SI570_GPSR_SCL 32'h00000001
+`define SI570_GPSR_SDA_OFFSET 1
+`define SI570_GPSR_SDA 32'h00000002
+`define ADDR_SI570_GPCR                4'hc
+`define SI570_GPCR_SCL_OFFSET 0
+`define SI570_GPCR_SCL 32'h00000001
+`define SI570_GPCR_SDA_OFFSET 1
+`define SI570_GPCR_SDA 32'h00000002

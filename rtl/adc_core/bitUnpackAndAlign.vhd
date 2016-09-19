@@ -25,6 +25,10 @@ end bitUnpackAndAlign;
 
 architecture Behavioral of bitUnpackAndAlign is
 
+ 
+
+  
+  
   signal serdes_out_data : std_logic_vector(63 downto 0);
   signal serdes_out_fr   : std_logic_vector(7 downto 0);
   signal serdes_synced   : std_logic;
@@ -32,9 +36,20 @@ architecture Behavioral of bitUnpackAndAlign is
   signal count           : std_logic_vector(1 downto 0);
   signal test            : std_logic_vector(7 downto 0);
 
+  signal data: std_logic_vector(63 downto 0);
+  signal fr : std_logic_vector(7 downto 0);
   signal cnt : unsigned(5 downto 0);
 
+component ila_1 is
+    port(
+      clk     : in std_logic;
+      probe0  : in std_logic_vector(7 downto 0);
+      probe1  : in std_logic_vector(0 downto 0);
+      probe2  : in std_logic_vector(0 downto 0);
+      probe3 : in std_logic_vector(63 downto 0)
+      );
 
+  end component;
 begin
 
 -- Sort all the raw data from the SERDES. 
@@ -44,15 +59,15 @@ begin
 --    out_data(63:48) = CH4
 
   gen_serdes_dout_reorder : for I in 0 to 7 generate
-    serdes_out_data(15 - 2*i)   <= serdes_data_raw_i(1 + i*9);
-    serdes_out_data(15 - 2*i-1) <= serdes_data_raw_i(0 + i*9);
-    serdes_out_data(31 - 2*i)   <= serdes_data_raw_i(3 + i*9);
-    serdes_out_data(31 - 2*i-1) <= serdes_data_raw_i(2 + i*9);
-    serdes_out_data(47 - 2*i)   <= serdes_data_raw_i(5 + i*9);
-    serdes_out_data(47 - 2*i-1) <= serdes_data_raw_i(4 + i*9);
-    serdes_out_data(63 - 2*i)   <= serdes_data_raw_i(7 + i*9);
-    serdes_out_data(63 - 2*i-1) <= serdes_data_raw_i(6 + i*9);
-    serdes_out_fr(i)            <= serdes_data_raw_i(8 + i*9);  -- FR
+    serdes_out_data(15 - 2*i)   <= not serdes_data_raw_i(1 + i*9);
+    serdes_out_data(15 - 2*i-1) <= not serdes_data_raw_i(0 + i*9);
+    serdes_out_data(31 - 2*i)   <= not serdes_data_raw_i(3 + i*9);
+    serdes_out_data(31 - 2*i-1) <= not serdes_data_raw_i(2 + i*9);
+    serdes_out_data(47 - 2*i)   <= not serdes_data_raw_i(5 + i*9);
+    serdes_out_data(47 - 2*i-1) <= not serdes_data_raw_i(4 + i*9);
+    serdes_out_data(63 - 2*i)   <= not serdes_data_raw_i(7 + i*9);
+    serdes_out_data(63 - 2*i-1) <= not serdes_data_raw_i(6 + i*9);
+    serdes_out_fr(i)            <= not serdes_data_raw_i(8 + i*9);  -- FR
   end generate gen_serdes_dout_reorder;
 
 
@@ -101,6 +116,22 @@ begin
       end if;
     end if;
   end process;
+
+    process(clk_adc_i, rst_n_i)
+    begin
+      if rising_edge(clk_adc_i) then
+        data <= serdes_out_data;
+        fr <= serdes_out_fr;
+        end if;
+      end process;
+      
+  ila_1_1: ila_1
+    port map (
+      clk    => clk_adc_i,
+      probe0 => fr,
+      probe1(0) => serdes_bitslip,
+      probe2(0) => serdes_synced,
+      probe3 => data);
 
   bitslip_o <= serdes_bitslip;
 

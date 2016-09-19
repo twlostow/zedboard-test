@@ -100,7 +100,7 @@ module ad9263_serdes_selectio_wiz
    // BUFR generates the slow clock
    BUFR
     #(.SIM_DEVICE("7SERIES"),
-    .BUFR_DIVIDE("8"))
+    .BUFR_DIVIDE("4"))
     clkout_buf_inst
     (.O (clk_div),
      .CE(1'b1),
@@ -142,7 +142,7 @@ module ad9263_serdes_selectio_wiz
      // declare the iserdes
      ISERDESE2
        # (
-         .DATA_RATE         ("SDR"),
+         .DATA_RATE         ("DDR"),
          .DATA_WIDTH        (8),
          .INTERFACE_TYPE    ("NETWORKING"), 
          .DYN_CLKDIV_INV_EN ("FALSE"),

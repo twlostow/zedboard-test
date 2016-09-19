@@ -163,8 +163,8 @@ architecture rtl of adc_core is
   begin
     return triggers(0)(channel) or triggers(1)(channel) or triggers(2)(channel) or triggers(3)(channel);
   end f_gen_trigger;
-  signal rst_adc_serdes : std_logic;
-  
+  signal rst_adc_serdes, rst_adc_clock : std_logic;
+  signal rst_adc_sys : std_logic;
 begin
 
   xwb_axi4lite_bridge_1 : xwb_axi4lite_bridge
@@ -192,8 +192,17 @@ begin
       master_i   => cnx_master_in
       );
 
-  rst_adc_serdes   <= not rst_n_i or gpio_out(1);
-  rst_adc   <= not rst_n_i or gpio_out(2);
+  rst_adc_serdes   <= not gpio_out(10);
+  rst_adc_clock   <= not gpio_out(11);
+  rst_adc_sys   <= not rst_n_i or gpio_out(12);
+
+  gc_sync_ffs_1: gc_sync_ffs
+    port map (
+      clk_i    => clk_adc,
+      rst_n_i  => rst_n_i,
+      data_i   => rst_adc_sys,
+      synced_o => rst_adc);
+  
   rst_n_adc <= not rst_adc;
 
   U_Serdes : ad9263_serdes
@@ -206,7 +215,7 @@ begin
       clk_in_p                        => adc_dco_p_i,
       clk_in_n                        => adc_dco_n_i,
       clk_div_out                     => clk_adc,
-      clk_reset                       => rst_adc_serdes,
+      clk_reset                       => rst_adc_clock,
       io_reset                        => rst_adc_serdes,
       bitslip                         => serdes_bitslip_slv);
 
